@@ -1,0 +1,22 @@
+    {
+        "properties": {
+            "roleName": "rbac-rolatestowa-01",
+            "description": "jw",
+            "assignableScopes": [
+                "/subscriptions/f0000004-0000-4001-b00e-200000000007"
+            ],
+            "permissions": [
+                {
+                    "actions": [
+                        "Microsoft.Compute/virtualMachines/deallocate/action",
+                        "Microsoft.Compute/virtualMachines/powerOff/action",
+                        "Microsoft.Compute/virtualMachines/start/action",
+                        "Microsoft.Compute/virtualMachines/read"
+                    ],
+                    "notActions": [],
+                    "dataActions": [],
+                    "notDataActions": []
+                }
+            ]
+        }
+    }
