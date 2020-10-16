@@ -1,0 +1,631 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vmname1": {
+            "defaultValue": "myVM1",
+            "type": "String",
+            "metadata": {
+              "description": "Nazwa VM"
+            }
+        },
+         "vmsize1": {
+            "defaultValue": "Standard_B1ms",
+            "type": "String",
+            "metadata": {
+              "description": "Wariant VM"
+            }
+        },
+        "vnetname1": {
+            "defaultValue": "myVnet",
+            "type": "String",
+            "metadata": {
+              "description": "Nazwa VNETu"
+            }
+        },
+        "subnetname1": {
+            "defaultValue": "mySubnet1",
+            "type": "String",
+            "metadata": {
+                "description": "Nazwa Subnetu"
+            }
+        },
+        "vnetaddressspace1": {
+            "defaultValue": "192.168.0.0/24",
+            "type": "String",
+            "metadata": {
+                "description": "IP przestrzen adresowa"
+            }
+        },
+        "vnetsubnetprefix1": {
+            "defaultValue": "192.168.0.0/24",
+            "type": "String",
+            "metadata": {
+                "description": "IP adresacja subnetu"
+            }
+        },
+        "natgatewayname1": {
+            "defaultValue": "myNATgateway",
+            "type": "String",
+            "metadata": {
+              "description": "Nazwa bramy NAT"
+            }
+        },
+        "networkinterfacename1": {
+            "defaultValue": "myvmNIC",
+            "type": "String",
+            "metadata": {
+              "description": "Nazwa NIC VM"
+            }
+        },
+        "publicipname1": {
+            "defaultValue": "myPublicIP",
+            "type": "String",
+            "metadata": {
+              "description": "Nazwa bramy NAT i publicznego IP"
+            }
+        },
+        "nsgname1": {
+            "defaultValue": "myVMnsg1",
+            "type": "String",
+            "metadata": {
+              "description": "Nazwa NSG dla VM"
+            }
+        },
+        "publicipvmname1": {
+            "defaultValue": "myPublicIPVM",
+            "type": "String",
+            "metadata": {
+              "description": "Nazwa publicznego IP VM"
+            }
+        },
+        "publicipprefixname1": {
+            "defaultValue": "myPublicIPPrefix",
+            "type": "String",
+            "metadata": {
+              "description": "Brama NAT (publiczne IP)"
+            }
+        },
+        "adminusername1": {
+            "type": "String",
+            "metadata": {
+              "description": "Nazwa konta o uprawnieniac administratora"
+            }
+        },
+        "adminpassword1": {
+            "type": "secureString",
+            "metadata": {
+              "description": "Haslo admina do VM"
+            }
+        },
+        "location1": {
+            "defaultValue": "[resourceGroup().location]",
+            "type": "String",
+            "metadata": {
+              "description": "Name of resource group"
+            }
+        },
+		"vmname2": {
+            "defaultValue": "myVM2",
+            "type": "String",
+            "metadata": {
+              "description": "Nazwa VM"
+            }
+        },
+         "vmsize2": {
+            "defaultValue": "Standard_B1ms",
+            "type": "String",
+            "metadata": {
+              "description": "Wariant VM"
+            }
+        },
+        "natgatewayname2": {
+            "defaultValue": "myNATgateway2",
+            "type": "String",
+            "metadata": {
+              "description": "Nazwa bramy NAT"
+            }
+        },
+        "networkinterfacename2": {
+            "defaultValue": "myvmNIC2",
+            "type": "String",
+            "metadata": {
+              "description": "Nazwa NIC VM2"
+            }
+        },
+        "publicipname2": {
+            "defaultValue": "myPublicIP2",
+            "type": "String",
+            "metadata": {
+              "description": "Nazwa bramy NAT i publicznego IP"
+            }
+        },
+        "nsgname2": {
+            "defaultValue": "myVMnsg2",
+            "type": "String",
+            "metadata": {
+              "description": "Nazwa NSG dla VM"
+            }
+        },
+        "publicipvmname2": {
+            "defaultValue": "myPublicIPVM2",
+            "type": "String",
+            "metadata": {
+              "description": "Nazwa publicznego IP VM"
+            }
+        },
+        "publicipprefixname2": {
+            "defaultValue": "myPublicIPPrefix2",
+            "type": "String",
+            "metadata": {
+              "description": "Brama NAT (publiczne IP)"
+            }
+        },
+        "adminusername2": {
+            "type": "String",
+            "metadata": {
+              "description": "Nazwa konta o uprawnieniach administratora"
+            }
+        },
+        "adminpassword2": {
+            "type": "secureString",
+            "metadata": {
+              "description": "Haslo admina do VM"
+            }
+        },
+
+        "linkedTemplateUri": {
+            "type": "string",
+            "metadata": {
+              "description": "The Uri of the linked template."
+            }
+          },
+          "projectName": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 11,
+            "metadata": {
+              "description": "Specify a project name that is used to generate resource names."
+            }
+        },
+
+        "location2": {
+            "defaultValue": "[resourceGroup().location]",
+            "type": "String",
+            "metadata": {
+              "description": "Name of resource group"
+            }
+        }
+		
+    },
+    "variables": {
+
+            "storageAccountName": "[concat(parameters('projectName'), 'store')]"
+          
+    },
+
+
+
+    "resources": [
+        {
+            "name": "linkedTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "properties": {
+              "mode": "Incremental",
+              "templateLink": {
+                  "uri": "https://storadzownia2.file.core.windows.net/mskrfiles2/blablablabli/azure_mskr_storage.json",
+                "comment": "[parameters('linkedTemplateUri')]"
+              },
+              "parameters": {
+                "storageAccountName": {
+                  "value": "[variables('storageAccountName')]"
+                },
+                "location": {
+                  "value": "[parameters('location')]"
+                }
+              }
+            }
+          },
+
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2019-11-01",
+            "name": "[parameters('nsgname1')]",
+            "location": "[parameters('location1')]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "SSH",
+                        "properties": {
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 300,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2019-11-01",
+            "name": "[parameters('publicipname1')]",
+            "location": "[parameters('location1')]",
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2019-11-01",
+            "name": "[parameters('publicipvmname1')]",
+            "location": "[parameters('location1')]",
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPPrefixes",
+            "apiVersion": "2019-11-01",
+            "name": "[parameters('publicipprefixname1')]",
+            "location": "[parameters('location1')]",
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "prefixLength": 31,
+                "publicIPAddressVersion": "IPv4"
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2019-07-01",
+            "name": "[parameters('vmname1')]",
+            "location": "[parameters('location1')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkinterfacename1'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('vmsize1')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "UbuntuServer",
+                        "sku": "18.04-LTS",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[concat(parameters('vmname1'), '_disk1')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS"   
+                        },
+                        "diskSizeGB": 30
+                    }
+                    
+                },
+                "osProfile": {
+                    "computerName": "[parameters('vmname1')]",
+                    "adminUsername": "[parameters('adminusername1')]",
+                    "adminPassword": {
+                            "reference": {
+                                "keyVault": {
+                                "id": "/subscriptions/00000000-0000-0000-0000-0000000000/resourceGroups/mojprywatnykeyvault/providers/Microsoft.KeyVault/vaults/kluczownia"
+                                },
+                                "secretName": "vm1tajnehaslo"
+                            }
+                        },
+
+
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": false,
+                        "provisionVMAgent": true
+                    },
+                    "allowExtensionOperations": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkinterfacename1'))]"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2019-11-01",
+            "name": "[parameters('vnetname1')]",
+            "location": "[parameters('location1')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/natGateways', parameters('natgatewayname1'))]"
+            ],
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('vnetaddressspace1')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('subnetname1')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('vnetsubnetprefix1')]",
+                            "natGateway": {
+                                "id": "[resourceId('Microsoft.Network/natGateways', parameters('natgatewayname1'))]"
+                            },
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        }
+                    }
+                ],
+                "enableDdosProtection": false,
+                "enableVmProtection": false
+            }
+        },
+        {
+            "type": "Microsoft.Network/natGateways",
+            "apiVersion": "2019-11-01",
+            "name": "[parameters('natgatewayname1')]",
+            "location": "[parameters('location1')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicipname1'))]",
+                "[resourceId('Microsoft.Network/publicIPPrefixes', parameters('publicipprefixname1'))]"
+            ],
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "idleTimeoutInMinutes": 4,
+                "publicIpAddresses": [
+                    {
+                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicipname1'))]"
+                    }
+                ],
+                "publicIpPrefixes": [
+                    {
+                        "id": "[resourceId('Microsoft.Network/publicIPPrefixes', parameters('publicipprefixname1'))]"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2019-11-01",
+            "name": "[concat(parameters('vnetname1'), '/mySubnet1')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnetname1'))]",
+                "[resourceId('Microsoft.Network/natGateways', parameters('natgatewayname1'))]"
+            ],
+            "properties": {
+                "addressPrefix": "[parameters('vnetsubnetprefix1')]",
+                "natGateway": {
+                    "id": "[resourceId('Microsoft.Network/natGateways', parameters('natgatewayname1'))]"
+                },
+                "privateEndpointNetworkPolicies": "Enabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2019-11-01",
+            "name": "[parameters('networkinterfacename1')]",
+            "location": "[parameters('location1')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicipvmname1'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetname1'), 'mySubnet1')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgname1'))]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig",
+                        "properties": {
+                            "privateIPAddress": "192.168.0.4",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicipvmname1'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetname1'), 'mySubnet1')]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgname1'))]"
+                }
+            }
+        },
+    
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2019-11-01",
+            "name": "[parameters('nsgname2')]",
+            "location": "[parameters('location2')]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "SSH",
+                        "properties": {
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 300,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2019-11-01",
+            "name": "[parameters('publicipname2')]",
+            "location": "[parameters('location2')]",
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2019-11-01",
+            "name": "[parameters('publicipvmname2')]",
+            "location": "[parameters('location2')]",
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPPrefixes",
+            "apiVersion": "2019-11-01",
+            "name": "[parameters('publicipprefixname2')]",
+            "location": "[parameters('location2')]",
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "prefixLength": 31,
+                "publicIPAddressVersion": "IPv4"
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2019-07-01",
+            "name": "[parameters('vmname2')]",
+            "location": "[parameters('location2')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkinterfacename2'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('vmsize2')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "UbuntuServer",
+                        "sku": "18.04-LTS",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[concat(parameters('vmname2'), '_disk2')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS"   
+                        },
+                        "diskSizeGB": 30
+                    }
+                    
+                },
+                "osProfile": {
+                    "computerName": "[parameters('vmname2')]",
+                    "adminUsername": "[parameters('adminusername2')]",
+                    "adminPassword": {
+                        "reference": {
+                            "keyVault": {
+                            "id": "/subscriptions/00000000-0000-0000-0000-0000000000/resourceGroups/mojprywatnykeyvault/providers/Microsoft.KeyVault/vaults/kluczownia"
+                            },
+                            "secretName": "vm2tajnehaslo"
+                        }
+                    },
+
+
+                "linuxConfiguration": {
+                        "disablePasswordAuthentication": false,
+                        "provisionVMAgent": true
+                    },
+                    "allowExtensionOperations": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkinterfacename2'))]"
+                        }
+                    ]
+                }
+            }
+        },
+       
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2019-11-01",
+            "name": "[parameters('networkinterfacename2')]",
+            "location": "[parameters('location2')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicipvmname2'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetname1'), 'mySubnet1')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgname1'))]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig",
+                        "properties": {
+                            "privateIPAddress": "192.168.0.5",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicipvmname2'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetname1'), 'mySubnet1')]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgname2'))]"
+                }
+            }
+        }
+    
+
+        
+    ]
+
+    
+}
+
+
